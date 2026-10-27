@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: cinema-booking-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cinema-booking-system
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:local_pass}
+  jpa:
+    ddl-auto: update
+    show-sql: true
