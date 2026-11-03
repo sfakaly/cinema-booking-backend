@@ -1,4 +1,4 @@
-package io.github.sfakaly.cinemabooking;
+package io.github.sfakaly;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

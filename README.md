@@ -22,3 +22,7 @@ Check the Java version:
 ```bash
 java --version
 ```
+
+## Database architecture
+
+![Cinema database schema](./docs/database/cinema_booking_backend.svg)
