@@ -1,4 +1,4 @@
-package io.github.sfakaly.catalog.enums;
+package io.github.sfakaly.catalog.movie;
 
 public enum AgeRating {
     ANY,

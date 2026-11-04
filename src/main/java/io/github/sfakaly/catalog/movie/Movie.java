@@ -1,6 +1,5 @@
-package io.github.sfakaly.catalog.model;
+package io.github.sfakaly.catalog.movie;
 
-import io.github.sfakaly.catalog.enums.AgeRating;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

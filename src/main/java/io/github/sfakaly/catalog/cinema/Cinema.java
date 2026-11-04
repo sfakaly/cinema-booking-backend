@@ -1,4 +1,4 @@
-package io.github.sfakaly.catalog.model;
+package io.github.sfakaly.catalog.cinema;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
