@@ -12,6 +12,7 @@ REST API for cinema booking
 - Flyway
 - Lombok
 - MapStruct
+- Swagger / OpenAPI documentation
 
 ## Requirements
 

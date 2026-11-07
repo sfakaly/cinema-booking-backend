@@ -1,9 +1,7 @@
 package io.github.sfakaly.catalog.movie;
 
 import io.github.sfakaly.config.CentralMappingConfig;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -18,5 +16,6 @@ public interface MovieMapper {
     List<MovieResponse> toResponseList(List<Movie> movies);
 
     @Mapping(target = "id", ignore = true)
-    void updateEntityFromRequest(MovieCreateRequest dto, @MappingTarget Movie movie);
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntityFromRequest(MoviePatchRequest dto, @MappingTarget Movie movie);
 }

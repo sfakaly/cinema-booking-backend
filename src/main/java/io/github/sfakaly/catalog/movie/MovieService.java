@@ -41,7 +41,7 @@ public class MovieService {
     }
 
     @Transactional
-    public MovieResponse updateMovie(Long id, MovieCreateRequest dto) {
+    public MovieResponse updateMovie(Long id, MoviePatchRequest dto) {
         Movie existingMovie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie with %d id not found".formatted(id)));
 
