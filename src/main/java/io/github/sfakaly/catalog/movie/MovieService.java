@@ -1,5 +1,8 @@
 package io.github.sfakaly.catalog.movie;
 
+import io.github.sfakaly.catalog.movie.dto.MovieCreateRequest;
+import io.github.sfakaly.catalog.movie.dto.MoviePatchRequest;
+import io.github.sfakaly.catalog.movie.dto.MovieResponse;
 import io.github.sfakaly.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
