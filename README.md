@@ -11,6 +11,7 @@ REST API for cinema booking
 - Maven
 - Flyway
 - Lombok
+- MapStruct
 
 ## Requirements
 
