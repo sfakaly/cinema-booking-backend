@@ -46,7 +46,7 @@ public class MovieService {
     public MovieResponse patch(Long id, MoviePatchRequest dto) {
         Movie existingMovie = findOrThrow(id);
 
-        movieMapper.updateEntityFromRequest(dto, existingMovie);
+        movieMapper.patchEntityFromRequest(dto, existingMovie);
         return movieMapper.toResponse(existingMovie);
     }
 

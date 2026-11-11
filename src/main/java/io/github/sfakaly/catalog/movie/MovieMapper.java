@@ -16,5 +16,5 @@ public interface MovieMapper {
 
     @Mapping(target = "id", ignore = true)
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromRequest(MoviePatchRequest dto, @MappingTarget Movie movie);
+    void patchEntityFromRequest(MoviePatchRequest dto, @MappingTarget Movie movie);
 }

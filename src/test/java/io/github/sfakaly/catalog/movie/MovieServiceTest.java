@@ -152,7 +152,7 @@ class MovieServiceTest {
         assertEquals(expectedMovieResponse, actualResponse);
 
         then(movieRepository).should().findById(id);
-        then(movieMapper).should().updateEntityFromRequest(dto, movie);
+        then(movieMapper).should().patchEntityFromRequest(dto, movie);
         then(movieMapper).should().toResponse(movie);
     }
 
