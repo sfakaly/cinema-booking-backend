@@ -19,9 +19,7 @@ public class MovieService {
 
     @Transactional(readOnly = true)
     public MovieResponse findById(Long id) {
-        return movieRepository.findById(id)
-                .map(movieMapper::toResponse)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie with %d id not found".formatted(id)));
+        return movieMapper.toResponse(findOrThrow(id));
     }
 
     @Transactional(readOnly = true)
@@ -39,18 +37,21 @@ public class MovieService {
 
     @Transactional
     public void delete(Long id) {
-        Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie with %d id not found".formatted(id)));
+        Movie movie = findOrThrow(id);
 
         movieRepository.delete(movie);
     }
 
     @Transactional
     public MovieResponse patch(Long id, MoviePatchRequest dto) {
-        Movie existingMovie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie with %d id not found".formatted(id)));
+        Movie existingMovie = findOrThrow(id);
 
         movieMapper.updateEntityFromRequest(dto, existingMovie);
         return movieMapper.toResponse(existingMovie);
+    }
+
+    private Movie findOrThrow(Long id) {
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie with %d id not found".formatted(id)));
     }
 }
