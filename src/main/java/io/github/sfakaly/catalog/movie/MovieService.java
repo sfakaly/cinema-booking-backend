@@ -39,8 +39,10 @@ public class MovieService {
 
     @Transactional
     public void deleteMovie(Long id) {
-        if (!movieRepository.existsById(id)) throw new ResourceNotFoundException("Movie with %d id not found".formatted(id));
-        movieRepository.deleteById(id);
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie with %d id not found".formatted(id)));
+
+        movieRepository.delete(movie);
     }
 
     @Transactional
@@ -49,7 +51,6 @@ public class MovieService {
                 .orElseThrow(() -> new ResourceNotFoundException("Movie with %d id not found".formatted(id)));
 
         movieMapper.updateEntityFromRequest(dto, existingMovie);
-        Movie updatedMovie = movieRepository.save(existingMovie);
-        return movieMapper.toResponse(updatedMovie);
+        return movieMapper.toResponse(existingMovie);
     }
 }
