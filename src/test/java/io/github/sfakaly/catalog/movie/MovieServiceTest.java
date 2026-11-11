@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ class MovieServiceTest {
     private MovieService movieService;
 
     @Test
-    void getMovieById_whenMovieExists_returnsMovieResponse() {
+    void findById_whenMovieExists_returnsMovieResponse() {
         Long id = 100L;
 
         Movie movie = movie(id);
@@ -40,7 +41,7 @@ class MovieServiceTest {
         given(movieRepository.findById(id)).willReturn(Optional.of(movie));
         given(movieMapper.toResponse(movie)).willReturn(expectedMovieResponse);
 
-        MovieResponse actualResponse = movieService.getMovieById(id);
+        MovieResponse actualResponse = movieService.findById(id);
 
         assertEquals(expectedMovieResponse, actualResponse);
 
@@ -49,13 +50,13 @@ class MovieServiceTest {
     }
 
     @Test
-    void getMovieById_whenMovieDoesNotExist_throwsResourceNotFoundException() {
+    void findById_whenMovieDoesNotExist_throwsResourceNotFoundException() {
         Long id = 999L;
 
         given(movieRepository.findById(id)).willReturn(Optional.empty());
 
         ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
-                movieService.getMovieById(id));
+                movieService.findById(id));
 
         assertEquals("Movie with %d id not found".formatted(id), ex.getMessage());
 
@@ -64,27 +65,29 @@ class MovieServiceTest {
     }
 
     @Test
-    void getAllMovies_returnsMovieResponseList() {
+    void findAll_returnsMovieResponsePage() {
 
+        Pageable pageable = PageRequest.of(0, 20, Sort.by("id").ascending());
         Movie movie = movie(100L);
-        MovieResponse expectedMovieResponse = movieResponse(100L, "test title");
+        MovieResponse expectedResponse = movieResponse(100L, "test title");
 
-        List<Movie> movies = List.of(movie);
-        List<MovieResponse> expectedResponseList = List.of(expectedMovieResponse);
+        Page<Movie> moviePage = new PageImpl<>(List.of(movie), pageable, 1);
+        Page<MovieResponse> expectedPage = new PageImpl<>(List.of(expectedResponse), pageable, 1);
 
-        given(movieRepository.findAll()).willReturn(movies);
-        given(movieMapper.toResponseList(movies)).willReturn(expectedResponseList);
+        given(movieRepository.findAll(pageable)).willReturn(moviePage);
+        given(movieMapper.toResponse(movie)).willReturn(expectedResponse);
 
-        List<MovieResponse> actualResponseList = movieService.getAllMovies();
+        Page<MovieResponse> actualPage = movieService.findAll(pageable);
 
-        assertEquals(expectedResponseList, actualResponseList);
+        assertNotNull(actualPage);
+        assertEquals(expectedPage, actualPage);
 
-        then(movieRepository).should().findAll();
-        then(movieMapper).should().toResponseList(movies);
+        then(movieRepository).should().findAll(pageable);
+        then(movieMapper).should().toResponse(movie);
     }
 
     @Test
-    void createMovie_validDto_returnsMovieResponse() {
+    void create_validDto_returnsMovieResponse() {
 
         MovieCreateRequest dto = new MovieCreateRequest("test title", "test description", AgeRating.ANY, 1000);
         Movie movie = movie(null);
@@ -96,7 +99,7 @@ class MovieServiceTest {
         given(movieRepository.save(movie)).willReturn(savedMovie);
         given(movieMapper.toResponse(savedMovie)).willReturn(expectedMovieResponse);
 
-        MovieResponse actualResponse = movieService.createMovie(dto);
+        MovieResponse actualResponse = movieService.create(dto);
 
         assertEquals(expectedMovieResponse, actualResponse);
 
@@ -106,26 +109,26 @@ class MovieServiceTest {
     }
 
     @Test
-    void deleteMovie_whenMovieExists_deletesMovie() {
+    void delete_whenMovieExists_deletesMovie() {
         Long id = 100L;
         Movie movie = movie(id);
 
         given(movieRepository.findById(id)).willReturn(Optional.of(movie));
 
-        movieService.deleteMovie(id);
+        movieService.delete(id);
 
         then(movieRepository).should().findById(id);
         then(movieRepository).should().delete(movie);
     }
 
     @Test
-    void deleteMovie_whenMovieDoesNotExist_throwsResourceNotFoundException() {
+    void delete_whenMovieDoesNotExist_throwsResourceNotFoundException() {
         Long id = 999L;
 
         given(movieRepository.findById(id)).willReturn(Optional.empty());
 
         ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
-                movieService.deleteMovie(id));
+                movieService.delete(id));
 
         assertEquals("Movie with %d id not found".formatted(id), ex.getMessage());
 
@@ -134,7 +137,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void updateMovie_whenMovieExists_returnsMovieResponse() {
+    void patch_whenMovieExists_returnsMovieResponse() {
         Long id = 100L;
 
         MoviePatchRequest dto = new MoviePatchRequest("changed test title", "test description", AgeRating.ANY, 1000);
@@ -144,7 +147,7 @@ class MovieServiceTest {
         given(movieRepository.findById(id)).willReturn(Optional.of(movie));
         given(movieMapper.toResponse(movie)).willReturn(expectedMovieResponse);
 
-        MovieResponse actualResponse = movieService.updateMovie(id, dto);
+        MovieResponse actualResponse = movieService.patch(id, dto);
 
         assertEquals(expectedMovieResponse, actualResponse);
 
@@ -154,7 +157,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void updateMovie_whenMovieDoesNotExist_throwsResourceNotFoundException() {
+    void patch_whenMovieDoesNotExist_throwsResourceNotFoundException() {
         Long id = 999L;
 
         MoviePatchRequest dto = new MoviePatchRequest("changed test title", "test description", AgeRating.ANY, 1000);
@@ -162,7 +165,7 @@ class MovieServiceTest {
         given(movieRepository.findById(id)).willReturn(Optional.empty());
 
         ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
-                movieService.updateMovie(id, dto));
+                movieService.patch(id, dto));
 
         assertEquals("Movie with %d id not found".formatted(id), ex.getMessage());
 

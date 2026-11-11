@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public record MoviePatchRequest (
 
-        @Size(max = 255, message = "Movie title shouldn't be more than 255 symbols")
+        @Size(max = 255, message = "Title shouldn't be more than 255 symbols")
         String title,
 
         String description,

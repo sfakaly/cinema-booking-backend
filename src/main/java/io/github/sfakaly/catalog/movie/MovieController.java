@@ -5,10 +5,13 @@ import io.github.sfakaly.catalog.movie.dto.MoviePatchRequest;
 import io.github.sfakaly.catalog.movie.dto.MovieResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/movies")
@@ -18,29 +21,29 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping("/{id}")
-    public MovieResponse getMovieById(@PathVariable Long id) {
-        return movieService.getMovieById(id);
+    public MovieResponse getById(@PathVariable Long id) {
+        return movieService.findById(id);
     }
 
     @GetMapping
-    public List<MovieResponse> getAllMovies() {
-        return movieService.getAllMovies();
+    public Page<MovieResponse> findAll(@ParameterObject @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return movieService.findAll(pageable);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MovieResponse createMovie(@RequestBody @Valid MovieCreateRequest request) {
-        return movieService.createMovie(request);
+    public MovieResponse create(@RequestBody @Valid MovieCreateRequest request) {
+        return movieService.create(request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMovie(@PathVariable Long id) {
-        movieService.deleteMovie(id);
+    public void delete(@PathVariable Long id) {
+        movieService.delete(id);
     }
 
     @PatchMapping("/{id}")
-    public MovieResponse updateMovie(@PathVariable Long id, @RequestBody @Valid MoviePatchRequest request) {
-        return movieService.updateMovie(id, request);
+    public MovieResponse patch(@PathVariable Long id, @RequestBody @Valid MoviePatchRequest request) {
+        return movieService.patch(id, request);
     }
 }
