@@ -1,4 +1,4 @@
-package io.github.sfakaly.catalog.seat;
+package io.github.sfakaly.catalog.seat.type;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

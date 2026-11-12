@@ -1,6 +1,7 @@
 package io.github.sfakaly.catalog.seat;
 
 import io.github.sfakaly.catalog.hall.Hall;
+import io.github.sfakaly.catalog.seat.type.SeatType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
