@@ -1,4 +1,4 @@
-package io.github.sfakaly.catalog.hall;
+package io.github.sfakaly.catalog.hall.type;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,7 @@
 package io.github.sfakaly.catalog.hall;
 
 import io.github.sfakaly.catalog.cinema.Cinema;
+import io.github.sfakaly.catalog.hall.type.HallType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
